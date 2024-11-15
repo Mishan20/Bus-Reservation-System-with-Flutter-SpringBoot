@@ -1,3 +1,6 @@
+import 'package:bus_reservation/datasource/temp_db.dart';
+import 'package:bus_reservation/utils/constants.dart';
+import 'package:bus_reservation/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -8,12 +11,152 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  String? fromCity, toCity;
+  DateTime? departureDate;
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Search Page"),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Search for Buses",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                _buildDropdownField(
+                  label: "From",
+                  value: fromCity,
+                  onChanged: (value) {
+                    setState(() {
+                      fromCity = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildDropdownField(
+                  label: "To",
+                  value: toCity,
+                  onChanged: (value) {
+                    setState(() {
+                      toCity = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildDatePicker(),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: _search,
+                  child: const Text("Search"),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    String? value,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return emptyFieldErrMessage;
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: label,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+      ),
+      isExpanded: true,
+      items: cities
+          .map((city) => DropdownMenuItem<String>(
+                value: city,
+                child: Text(
+                  city,
+                  style: const TextStyle(fontSize: 16, color: Colors.teal),
+                ),
+              ))
+          .toList(),
+      onChanged: onChanged,
+    );
+  }
+
+  Widget _buildDatePicker() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.teal),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            departureDate == null
+                ? "Select Departure Date"
+                : getFormaattedDate(departureDate!, format: 'EEE MMM dd, yyyy'),
+            style: const TextStyle(fontSize: 16, color: Colors.teal),
+          ),
+          IconButton(
+            icon: const Icon(Icons.calendar_today, color: Colors.teal),
+            onPressed: _selectDate,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _selectDate() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 30)),
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          departureDate = value;
+        });
+      }
+    });
+  }
+
+  void _search() {
+    if (departureDate == null) {
+      showMsg(context, emptyDateErrMessage);
+    }
+    if (_formKey.currentState!.validate()) {
+      try {
+        final route = TempDB.tableRoute.firstWhere((element) =>
+            element.cityFrom == fromCity && element.cityTo == toCity);
+            showMsg(context, "Route found: ${route.cityFrom} to ${route.cityTo}");
+      } on StateError catch (error) {
+        showMsg(context, "Route not found");
+      }
+    }
+    return;
   }
 }
