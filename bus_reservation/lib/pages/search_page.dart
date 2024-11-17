@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause
+
 import 'package:bus_reservation/datasource/temp_db.dart';
 import 'package:bus_reservation/utils/constants.dart';
 import 'package:bus_reservation/utils/helper_functions.dart';
