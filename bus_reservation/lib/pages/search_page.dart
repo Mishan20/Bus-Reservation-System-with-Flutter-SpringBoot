@@ -1,9 +1,8 @@
-// ignore_for_file: unused_catch_clause
-
-import 'package:bus_reservation/datasource/temp_db.dart';
+import 'package:bus_reservation/providers/app_data_provider.dart';
 import 'package:bus_reservation/utils/constants.dart';
 import 'package:bus_reservation/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -119,7 +118,7 @@ class _SearchPageState extends State<SearchPage> {
           Text(
             departureDate == null
                 ? "Select Departure Date"
-                : getFormaattedDate(departureDate!, format: 'EEE MMM dd, yyyy'),
+                : getFormattedDate(departureDate!, format: 'EEE MMM dd, yyyy'),
             style: const TextStyle(fontSize: 16, color: Colors.teal),
           ),
           IconButton(
@@ -151,13 +150,14 @@ class _SearchPageState extends State<SearchPage> {
       showMsg(context, emptyDateErrMessage);
     }
     if (_formKey.currentState!.validate()) {
-      try {
-        final route = TempDB.tableRoute.firstWhere((element) =>
-            element.cityFrom == fromCity && element.cityTo == toCity);
-            showMsg(context, "Route found: ${route.cityFrom} to ${route.cityTo}");
-      } on StateError catch (error) {
-        showMsg(context, "Route not found");
-      }
+      Provider.of<AppDataProvider>(context, listen: false)
+          .getRouteByCityFromAndCityTo(fromCity!, toCity!).then((value){
+            if(value == null){
+              showMsg(context, "Route not found");
+            } else {
+              Navigator.pushNamed(context, routeNameSearchResultPage, arguments: [value, getFormattedDate(departureDate!)]);
+            }
+          });
     }
     return;
   }

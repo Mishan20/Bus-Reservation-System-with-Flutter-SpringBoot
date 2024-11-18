@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-String getFormaattedDate(DateTime dt, {String format = "yyyy-MM-dd"}) {
+String getFormattedDate(DateTime dt, {String format = "yyyy-MM-dd"}) {
   return DateFormat(format).format(dt);
 }
 
