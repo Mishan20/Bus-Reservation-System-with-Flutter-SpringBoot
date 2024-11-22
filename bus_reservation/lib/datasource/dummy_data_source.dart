@@ -8,7 +8,7 @@ import 'package:bus_reservation/models/bus_schedule.dart';
 import 'package:bus_reservation/models/but_route.dart';
 import 'package:bus_reservation/models/response_model.dart';
 
-class DummyDataSource extends DataSource{
+class DummyDataSource extends DataSource {
   @override
   Future<ResponseModel> addBus(Bus bus) {
     throw UnimplementedError();
@@ -55,22 +55,26 @@ class DummyDataSource extends DataSource{
   }
 
   @override
-  Future<List<BusReservation>> getReservationsByScheduleAndDepartureDate(int scheduleId, String departureDate) {
-    throw UnimplementedError();
+  Future<List<BusReservation>> getReservationsByScheduleAndDepartureDate(
+      int scheduleId, String departureDate) async {
+    return TempDB.tableReservation
+        .where((element) =>
+            element.busSchedule.scheduleId == scheduleId &&
+            element.departureDate == departureDate)
+        .toList();
   }
 
   @override
-  Future<BusRoute?> getRouteByCityFromAndCityTo(String cityFrom, String cityTo) async {
+  Future<BusRoute?> getRouteByCityFromAndCityTo(
+      String cityFrom, String cityTo) async {
     BusRoute? route;
-     try {
-         route = TempDB.tableRoute.firstWhere((element) =>
-            element.cityFrom == cityFrom && element.cityTo == cityTo);
-        return route;
-           
-      } on StateError catch (error) {
-        return null;
-       
-      }
+    try {
+      route = TempDB.tableRoute.firstWhere((element) =>
+          element.cityFrom == cityFrom && element.cityTo == cityTo);
+      return route;
+    } on StateError catch (error) {
+      return null;
+    }
   }
 
   @override
@@ -80,7 +84,9 @@ class DummyDataSource extends DataSource{
 
   @override
   Future<List<BusSchedule>> getSchedulesByRouteName(String routeName) async {
-    return TempDB.tableSchedule.where((schedule) => schedule.busRoute.routeName == routeName).toList();
+    return TempDB.tableSchedule
+        .where((schedule) => schedule.busRoute.routeName == routeName)
+        .toList();
   }
 
   @override
