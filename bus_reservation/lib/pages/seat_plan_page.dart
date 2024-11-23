@@ -133,7 +133,19 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onPressed: _onNextButtonPressed,
+                onPressed: () {
+                  if (selectedSeats.isEmpty) {
+                    showMsg(context, 'Please select your seat first');
+                    return;
+                  }
+                  Navigator.pushNamed(context, routeNameBookingConfirmationPage,
+                      arguments: [
+                        departureDate,
+                        schedule,
+                        selectedSeatStringNotifier.value,
+                        selectedSeats.length
+                      ]);
+                },
                 child: const Text(
                   'NEXT',
                   style: TextStyle(fontSize: 18, color: Colors.white),

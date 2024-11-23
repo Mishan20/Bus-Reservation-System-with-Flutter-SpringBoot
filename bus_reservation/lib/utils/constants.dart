@@ -1,4 +1,4 @@
-const String currency = '৳';
+const String currency = 'Rs';
 const String busTypeNonAc = 'NON-AC';
 const String busTypeACEconomy = 'AC-ECONOMY';
 const String busTypeACBusiness = 'AC-BUSINESS';
@@ -22,22 +22,38 @@ const String routeNameAddSchedulePage = 'add_schedule';
 const String routeNameScheduleListPage = 'schedule_list';
 const String routeNameReservationPage = 'reservation';
 
-
 const cities = [
-  'Dhaka',
-  'Chittagong',
-  'Sylhet',
-  'Bandarban',
-  'Rajshahi',
-  'Khagrachari',
-  'Rangamati',
+  'Kandy',
+  'Colombo',
+  'Panadura',
+  'Galle',
+  'Mathara',
+  'Kurunegala',
+  'Anuradhapura',
 ];
 
 enum ResponseStatus {
-  SAVED, FAILED, UNAUTHORIZED, AUTHORIZED, EXPIRED, NONE,
+  SAVED,
+  FAILED,
+  UNAUTHORIZED,
+  AUTHORIZED,
+  EXPIRED,
+  NONE,
 }
 
 const busTypes = [busTypeACBusiness, busTypeACEconomy, busTypeNonAc];
 
-const seatLabelList = ['A','B','C','D','E','F','G','H','I','J','K','L'];
-
+const seatLabelList = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L'
+];
