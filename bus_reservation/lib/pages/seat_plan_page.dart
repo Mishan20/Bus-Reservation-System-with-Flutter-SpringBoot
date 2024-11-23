@@ -88,40 +88,41 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
                 ),
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: SeatPlanView(
-                        onSeatSelected: (isSelected, seat) {
-                          setState(() {
-                            if (isSelected) {
-                              selectedSeats.add(seat);
-                            } else {
-                              selectedSeats.remove(seat);
-                            }
-                            selectedSeatStringNotifier.value =
-                                selectedSeats.join(',');
-                          });
-                        },
-                        totalSeatBooked: totalSeatBooked,
-                        bookedSeatNumbers: bookedSeatNumbers,
-                        totalSeat: schedule.bus.totalSeat,
-                        isBusinessClass:
-                            schedule.bus.busType == busTypeACBusiness,
+            if (!isDataLoading)
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SeatPlanView(
+                          onSeatSelected: (isSelected, seat) {
+                            setState(() {
+                              if (isSelected) {
+                                selectedSeats.add(seat);
+                              } else {
+                                selectedSeats.remove(seat);
+                              }
+                              selectedSeatStringNotifier.value =
+                                  selectedSeats.join(',');
+                            });
+                          },
+                          totalSeatBooked: totalSeatBooked,
+                          bookedSeatNumbers: bookedSeatNumbers,
+                          totalSeat: schedule.bus.totalSeat,
+                          isBusinessClass:
+                              schedule.bus.busType == busTypeACBusiness,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: ElevatedButton(
