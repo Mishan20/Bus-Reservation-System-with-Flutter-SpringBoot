@@ -96,4 +96,6 @@ class AppDataProvider extends ChangeNotifier {
       );
     });
   }
+
+  updateRoute(route) {}
 }

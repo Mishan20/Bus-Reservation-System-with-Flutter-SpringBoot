@@ -38,7 +38,7 @@ enum ResponseStatus {
   UNAUTHORIZED,
   AUTHORIZED,
   EXPIRED,
-  NONE,
+  NONE, UPDATED,
 }
 
 const busTypes = [busTypeACBusiness, busTypeACEconomy, busTypeNonAc];

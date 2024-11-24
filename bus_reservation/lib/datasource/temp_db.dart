@@ -7,9 +7,9 @@ import '../utils/constants.dart';
 
 class TempDB {
   static List<Bus> tableBus = [
-    Bus(busId: 1, busName: 'Pasindu Travels', busNumber: 'Test-0001', busType: busTypeACBusiness, totalSeat: 18),
-    Bus(busId: 2, busName: 'Ashoka Travels', busNumber: 'Test-0002', busType: busTypeACEconomy, totalSeat: 32),
-    Bus(busId: 3, busName: 'Damith Travels', busNumber: 'Test-0003', busType: busTypeNonAc, totalSeat: 40),
+    Bus(busId: 1, busName: 'Pasindu Travels', busNumber: 'Test-0001', busType: busTypeACBusiness, totalSeat: 18, ticketPrice: 1000),
+    Bus(busId: 2, busName: 'Ashoka Travels', busNumber: 'Test-0002', busType: busTypeACEconomy, totalSeat: 32, ticketPrice: 1500),
+    Bus(busId: 3, busName: 'Damith Travels', busNumber: 'Test-0003', busType: busTypeNonAc, totalSeat: 40, ticketPrice: 2000),
   ];
 
   static List<BusRoute> tableRoute = [

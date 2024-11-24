@@ -1,3 +1,4 @@
+import 'package:bus_reservation/drawers/main_drawer.dart';
 import 'package:bus_reservation/providers/app_data_provider.dart';
 import 'package:bus_reservation/utils/constants.dart';
 import 'package:bus_reservation/utils/helper_functions.dart';
@@ -19,6 +20,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MainDrawer(),
       appBar: AppBar(
         title: const Text(
           "Search for Buses",
@@ -151,13 +153,15 @@ class _SearchPageState extends State<SearchPage> {
     }
     if (_formKey.currentState!.validate()) {
       Provider.of<AppDataProvider>(context, listen: false)
-          .getRouteByCityFromAndCityTo(fromCity!, toCity!).then((value){
-            if(value == null){
-              showMsg(context, "Route not found");
-            } else {
-              Navigator.pushNamed(context, routeNameSearchResultPage, arguments: [value, getFormattedDate(departureDate!)]);
-            }
-          });
+          .getRouteByCityFromAndCityTo(fromCity!, toCity!)
+          .then((value) {
+        if (value == null) {
+          showMsg(context, "Route not found");
+        } else {
+          Navigator.pushNamed(context, routeNameSearchResultPage,
+              arguments: [value, getFormattedDate(departureDate!)]);
+        }
+      });
     }
     return;
   }

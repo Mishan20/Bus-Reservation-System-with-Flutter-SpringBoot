@@ -10,6 +10,6 @@ class Bus {
     required this.busName,
     required this.busNumber,
     required this.busType,
-    required this.totalSeat,
+    required this.totalSeat, required double ticketPrice,
   });
 }
