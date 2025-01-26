@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:bus_reservation/providers/app_data_provider.dart';
 import 'package:bus_reservation/utils/colors.dart';
 import 'package:bus_reservation/utils/constants.dart';
