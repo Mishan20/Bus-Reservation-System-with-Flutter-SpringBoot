@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,8 +25,8 @@ public class SecurityConfig {
     private JwtAuthFilter jwtAuthFilter;
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests()
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((authReq) -> authReq
                 .requestMatchers(HttpMethod.GET)
                 .permitAll()
                 .requestMatchers("/api/auth/**")
@@ -36,8 +37,7 @@ public class SecurityConfig {
                         "api/route/add")
                 .authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/reservation/add")
-                .permitAll()
-                .and()
+                .permitAll())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
