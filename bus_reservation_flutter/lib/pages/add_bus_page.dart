@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:bus_reservation/datasource/temp_db.dart';
+import 'package:bus_reservation/customwidgets/login_alert_dialog.dart';
 import 'package:bus_reservation/providers/app_data_provider.dart';
 import 'package:bus_reservation/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +21,7 @@ class _AddBusPageState extends State<AddBusPage> {
   String? busType;
   final seatController = TextEditingController();
   final nameController = TextEditingController();
-  final numberController = TextEditingController();
-  final priceController = TextEditingController(); // New controller for price
+  final numberController = TextEditingController(); // New controller for price
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +69,7 @@ class _AddBusPageState extends State<AddBusPage> {
               ),
               const SizedBox(height: 20),
               _buildSectionTitle('Sales Information'),
-              const SizedBox(height: 10),
-              _buildTextField(
-                controller: priceController,
-                hintText: 'Ticket Price (per seat)',
-                icon: Icons.attach_money,
-                inputType: TextInputType.number,
-              ),
+          
               const SizedBox(height: 20),
               _buildSubmitButton(),
             ],
@@ -175,17 +168,15 @@ class _AddBusPageState extends State<AddBusPage> {
     );
   }
 
+  
+
   void addBus() {
     if (_formKey.currentState!.validate()) {
       final bus = Bus(
-        busId: TempDB.tableBus.length +
-            1, // remove this line if you save into MySql DB
         busName: nameController.text,
         busNumber: numberController.text,
         busType: busType!,
         totalSeat: int.parse(seatController.text),
-        ticketPrice:
-            double.parse(priceController.text), // Include the ticket price
       );
       Provider.of<AppDataProvider>(context, listen: false)
           .addBus(bus)
@@ -193,6 +184,15 @@ class _AddBusPageState extends State<AddBusPage> {
         if (response.responseStatus == ResponseStatus.SAVED) {
           showMsg(context, response.message);
           resetFields();
+        } else if (response.responseStatus == ResponseStatus.EXPIRED ||
+            response.responseStatus == ResponseStatus.UNAUTHORIZED) {
+          showLoginAlertDialog(
+            context: context,
+            message: response.message,
+            callback: () {
+              Navigator.pushNamed(context, routeNameLoginPage);
+            },
+          );
         }
       });
     }
@@ -201,16 +201,14 @@ class _AddBusPageState extends State<AddBusPage> {
   void resetFields() {
     numberController.clear();
     seatController.clear();
-    nameController.clear();
-    priceController.clear(); // Clear the new price field
+    nameController.clear(); // Clear the new price field
   }
 
   @override
   void dispose() {
     seatController.dispose();
     nameController.dispose();
-    numberController.dispose();
-    priceController.dispose(); // Dispose the new controller
+    numberController.dispose(); // Dispose the new controller
     super.dispose();
   }
 }

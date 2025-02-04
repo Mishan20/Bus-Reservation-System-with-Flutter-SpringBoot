@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bus_reservation/models/bus_reservation.dart';
 import 'package:bus_reservation/models/bus_schedule.dart';
 import 'package:bus_reservation/models/customer.dart';
@@ -8,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BookingConfirmationPage extends StatefulWidget {
-  const BookingConfirmationPage({Key? key}) : super(key: key);
+  const BookingConfirmationPage({super.key});
 
   @override
   State<BookingConfirmationPage> createState() =>

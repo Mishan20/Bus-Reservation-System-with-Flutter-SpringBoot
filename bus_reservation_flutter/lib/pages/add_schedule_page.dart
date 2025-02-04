@@ -1,16 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:bus_reservation/customwidgets/login_alert_dialog.dart';
+import 'package:bus_reservation/models/bus_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../datasource/temp_db.dart';
 import '../models/bus_model.dart';
 import '../models/bus_schedule.dart';
-import '../models/but_route.dart';
 import '../providers/app_data_provider.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
 
 class AddSchedulePage extends StatefulWidget {
-  const AddSchedulePage({Key? key}) : super(key: key);
+  const AddSchedulePage({super.key});
 
   @override
   State<AddSchedulePage> createState() => _AddSchedulePageState();
@@ -235,13 +236,13 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   }
 
   void addSchedule() {
-    if (timeOfDay == null) {
+    if(timeOfDay == null) {
       showMsg(context, 'Please select a departure date');
       return;
     }
     if (_formKey.currentState!.validate()) {
       final schedule = BusSchedule(
-        scheduleId: TempDB.tableSchedule.length + 1,
+        //scheduleId: TempDB.tableSchedule.length + 1,
         bus: bus!,
         busRoute: busRoute!,
         departureTime: getFormattedTime(timeOfDay!),
@@ -255,8 +256,18 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
         if (response.responseStatus == ResponseStatus.SAVED) {
           showMsg(context, response.message);
           resetFields();
+        } else if (response.responseStatus == ResponseStatus.EXPIRED ||
+            response.responseStatus == ResponseStatus.UNAUTHORIZED) {
+          showLoginAlertDialog(
+            context: context,
+            message: response.message,
+            callback: () {
+              Navigator.pushNamed(context, routeNameLoginPage);
+            },
+          );
         }
       });
+
     }
   }
 

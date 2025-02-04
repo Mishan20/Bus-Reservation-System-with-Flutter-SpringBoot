@@ -1,20 +1,23 @@
 
 import 'package:bus_reservation/datasource/data_source.dart';
-import 'package:bus_reservation/datasource/dummy_data_source.dart';
+import 'package:bus_reservation/models/app_user.dart';
+import 'package:bus_reservation/models/auth_response_model.dart';
 import 'package:bus_reservation/models/bus_model.dart';
-import 'package:bus_reservation/models/reservation_expansion_item.dart';
 import 'package:bus_reservation/models/response_model.dart';
+import 'package:bus_reservation/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+
+import '../datasource/app_data_source.dart';
 import '../models/bus_reservation.dart';
 import '../models/bus_schedule.dart';
-import '../models/but_route.dart';
-
+import '../models/bus_route.dart';
+import '../models/reservation_expansion_item.dart';
 
 class AppDataProvider extends ChangeNotifier {
   List<Bus> _busList = [];
   List<BusRoute> _routeList = [];
   List<BusReservation> _reservationList = [];
-  List<BusSchedule> _scheduleList = [];
+  final List<BusSchedule> _scheduleList = [];
 
   List<BusSchedule> get scheduleList => _scheduleList;
 
@@ -23,7 +26,16 @@ class AppDataProvider extends ChangeNotifier {
   List<BusRoute> get routeList => _routeList;
 
   List<BusReservation> get reservationList => _reservationList;
-  final DataSource _dataSource = DummyDataSource();
+  final DataSource _dataSource = AppDataSource();
+
+  Future<AuthResponseModel?> login(AppUser user) async {
+    final response = await _dataSource.login(user);
+    if(response == null) return null;
+    await saveToken(response.accessToken);
+    await saveLoginTime(response.loginTime);
+    await saveExpirationDuration(response.expirationDuration);
+    return response;
+  }
 
   Future<ResponseModel> addBus(Bus bus) {
     return _dataSource.addBus(bus);
@@ -41,12 +53,12 @@ class AppDataProvider extends ChangeNotifier {
     return _dataSource.addReservation(reservation);
   }
 
-  void getAllBus() async {
+  Future<void> getAllBus() async {
     _busList = await _dataSource.getAllBus();
     notifyListeners();
   }
 
-  void getAllBusRoutes() async {
+  Future<void> getAllBusRoutes() async {
     _routeList = await _dataSource.getAllRoutes();
     notifyListeners();
   }
@@ -96,6 +108,4 @@ class AppDataProvider extends ChangeNotifier {
       );
     });
   }
-
-  updateRoute(route) {}
 }

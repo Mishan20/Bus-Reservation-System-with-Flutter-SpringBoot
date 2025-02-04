@@ -1,5 +1,5 @@
+import 'package:bus_reservation/models/bus_route.dart';
 import 'package:bus_reservation/models/bus_schedule.dart';
-import 'package:bus_reservation/models/but_route.dart';
 import 'package:bus_reservation/providers/app_data_provider.dart';
 import 'package:bus_reservation/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -97,8 +97,7 @@ class ScheduleItemView extends StatelessWidget {
   final String date;
   final BusSchedule schedule;
 
-  const ScheduleItemView({Key? key, required this.schedule, required this.date})
-      : super(key: key);
+  const ScheduleItemView({super.key, required this.schedule, required this.date});
 
   @override
   Widget build(BuildContext context) {

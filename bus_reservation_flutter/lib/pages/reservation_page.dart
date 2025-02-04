@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:bus_reservation/customwidgets/reservation_item_body_view.dart';
 import 'package:bus_reservation/customwidgets/reservation_item_header_view.dart';

@@ -23,23 +23,23 @@ public class SecurityConfig {
     private CustomUserDetailsService userDetailsService;
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
+
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authReq) -> authReq
-                .requestMatchers(HttpMethod.GET)
-                .permitAll()
-                .requestMatchers("/api/auth/**")
-                .permitAll()
-                .requestMatchers(HttpMethod.POST,
-                        "/api/bus/add",
-                        "api/schedule/add",
-                        "api/route/add")
-                .authenticated()
-                .requestMatchers(HttpMethod.POST, "/api/reservation/add")
-                .permitAll())
+                .authorizeHttpRequests(authReq -> authReq
+                        .requestMatchers(HttpMethod.GET).permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/reservation/add").permitAll() // Allow reservation API access for customers
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/bus/add",
+                                "/api/schedule/add",
+                                "/api/route/add").authenticated()
+                        .anyRequest().authenticated()
+                )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -55,4 +55,3 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 }
-

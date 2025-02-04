@@ -17,7 +17,7 @@ class ReservationItemHeaderView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('${header.schedule.busRoute.routeName}-${header.schedule.bus.busType}'),
-            Text('Booking Time: ${getFormattedDate(DateTime.fromMillisecondsSinceEpoch(header.timestamp), format: 'EEE MMM dd yyyy HH:mm')}'),
+            Text('Booking Time: ${getFormattedDate(DateTime.fromMillisecondsSinceEpoch(header.timestamp), pattern: 'EEE MMM dd yyyy HH:mm')}'),
           ],
         ),
       ),

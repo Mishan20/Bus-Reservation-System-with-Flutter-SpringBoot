@@ -11,7 +11,7 @@ import '../customwidgets/seat_plan_view.dart';
 import '../models/bus_schedule.dart';
 
 class SeatPlanPage extends StatefulWidget {
-  const SeatPlanPage({Key? key}) : super(key: key);
+  const SeatPlanPage({super.key});
 
   @override
   State<SeatPlanPage> createState() => _SeatPlanPageState();
